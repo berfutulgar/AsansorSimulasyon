@@ -1,0 +1,72 @@
+
+@startuml
+skinparam classAttributeIconSize 0
+
+class Simulator {
+  - currentTime : int
+  - passengers : List<Passenger>
+  - building : Building
+  + runSimulation() : void
+  + generatePassenger() : void
+}
+
+class Building {
+  - floors : List<Floor>
+  - elevators : List<Elevator>
+  + getElevator() : Elevator
+}
+
+class Floor {
+  - floorNumber : int
+  - callButtons : List<CallButton>
+  - doors : List<Door>
+  + pressButton(direction: String) : void
+}
+
+class Elevator {
+  - currentFloor : int
+  - targetFloors : List<int>
+  - capacity : int
+  - controlPanel : ControlPanel
+  + moveToFloor(floor: int) : void
+  + openDoor() : void
+  + closeDoor() : void
+}
+
+class ControlPanel {
+  - buttons : List<Button>
+  - doorOpenButton : Button
+  - doorCloseButton : Button
+  - emergencyButton : Button
+  + pressButton(floor: int) : void
+}
+
+class Passenger {
+  - id : int
+  - currentFloor : int
+  - targetFloor : int
+  + pressButton(floor: int) : void
+}
+
+class CallButton {
+  - direction : String
+  + press() : void
+}
+
+class Door {
+  - isOpen : boolean
+  + open() : void
+  + close() : void
+}
+
+Simulator "1" *-- "1" Building : contains
+Building "1" *-- "12" Floor : contains
+Building "1" *-- "5" Elevator : contains
+Floor "1" *-- "3" CallButton : contains
+Floor "1" *-- "5" Door : contains
+Elevator "1" *-- "1" ControlPanel : contains
+ControlPanel "1" *-- "many" Button : contains
+Passenger "1" --> "1" ControlPanel : uses
+Passenger "1" --> "1" CallButton : uses
+
+@enduml
